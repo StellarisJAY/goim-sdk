@@ -47,9 +47,10 @@ export class IMClient {
         conn.onmessage = (event: IMessageEvent)=>{
             try{
                 this.lastRead = Date.now()
-                let data = <Uint8Array>event.data
+                let buffer = <ArrayBuffer>event.data
+                let data = new Uint8Array(buffer)
                 let message = BaseMsg.decode(data)
-                console.info("received message: ", message.content)
+                console.info("received message: " + message.content)
 
             }catch(error) {
                 console.error("read message error: ", error)
@@ -73,13 +74,13 @@ export class IMClient {
         return new Promise<{status:boolean}>((resolve, rejects)=>{
             let request = {token:this.userToken} as HandshakeRequest
             let data = HandshakeRequest.encode(request).finish()
-            console.info("request: ", data)
             if(!this.sendData(data)) {
                 resolve({status:false})
             }
             conn.onmessage = (event: IMessageEvent) => {
-                console.info("on server respon")
-                let response = HandshakeResponse.decode(<Uint8Array>event.data)
+                let buffer = <ArrayBuffer>event.data
+                let data = new Uint8Array(buffer)
+                let response = HandshakeResponse.decode(data)
                 resolve({status:response.status == HandshakeStatus.Success})
             }
         })
@@ -110,6 +111,10 @@ export class IMClient {
             console.error("send message error: ", err)
             return false
         }
+    }
+
+    private hearbeatLoop() {
+
     }
 }
 
