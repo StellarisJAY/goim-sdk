@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ts-proto": "^1.121.4",
+    "websocket": "^1.0.34"
+  }
+}
