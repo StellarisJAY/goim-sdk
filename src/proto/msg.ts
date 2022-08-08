@@ -267,10 +267,11 @@ function longToNumber(long: Long): number {
 
 // If you get a compile-error about 'Constructor<Long> and ... have no overlap',
 // add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
+// if (_m0.util.Long !== Long) {
+ 
+// }
+_m0.util.Long = Long as any;
+_m0.configure();
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

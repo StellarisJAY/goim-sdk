@@ -1,10 +1,48 @@
 /* eslint-disable */
+import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "client";
 
+export enum HandshakeStatus {
+  Success = 0,
+  AccessDenied = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function handshakeStatusFromJSON(object: any): HandshakeStatus {
+  switch (object) {
+    case 0:
+    case "Success":
+      return HandshakeStatus.Success;
+    case 1:
+    case "AccessDenied":
+      return HandshakeStatus.AccessDenied;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return HandshakeStatus.UNRECOGNIZED;
+  }
+}
+
+export function handshakeStatusToJSON(object: HandshakeStatus): string {
+  switch (object) {
+    case HandshakeStatus.Success:
+      return "Success";
+    case HandshakeStatus.AccessDenied:
+      return "AccessDenied";
+    case HandshakeStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface HandshakeRequest {
   token: string;
+}
+
+export interface HandshakeResponse {
+  status: HandshakeStatus;
 }
 
 function createBaseHandshakeRequest(): HandshakeRequest {
@@ -61,6 +99,61 @@ export const HandshakeRequest = {
   },
 };
 
+function createBaseHandshakeResponse(): HandshakeResponse {
+  return { status: 0 };
+}
+
+export const HandshakeResponse = {
+  encode(
+    message: HandshakeResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.status !== 0) {
+      writer.uint32(8).int32(message.status);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): HandshakeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHandshakeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): HandshakeResponse {
+    return {
+      status: isSet(object.status) ? handshakeStatusFromJSON(object.status) : 0,
+    };
+  },
+
+  toJSON(message: HandshakeResponse): unknown {
+    const obj: any = {};
+    message.status !== undefined &&
+      (obj.status = handshakeStatusToJSON(message.status));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<HandshakeResponse>, I>>(
+    object: I
+  ): HandshakeResponse {
+    const message = createBaseHandshakeResponse();
+    message.status = object.status ?? 0;
+    return message;
+  },
+};
+
 type Builtin =
   | Date
   | Function
@@ -72,6 +165,8 @@ type Builtin =
 
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -88,6 +183,13 @@ export type Exact<P, I extends P> = P extends Builtin
         never
       >;
 
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+// if (_m0.util.Long !== Long) {
+ 
+// }
+ _m0.util.Long = Long as any;
+  _m0.configure();
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
