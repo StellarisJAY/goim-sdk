@@ -1,6 +1,10 @@
 {
   "dependencies": {
+    "ts-node": "^10.9.1",
     "ts-proto": "^1.121.4",
     "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "@types/websocket": "^1.0.5"
   }
 }
