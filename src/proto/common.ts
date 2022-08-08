@@ -1,5 +1,6 @@
 /* eslint-disable */
-import * as _m0 from "protobufjs/minimal";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "common";
 
@@ -82,6 +83,8 @@ type Builtin =
 
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -97,6 +100,11 @@ export type Exact<P, I extends P> = P extends Builtin
         Exclude<keyof I, KeysOfUnion<P>>,
         never
       >;
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

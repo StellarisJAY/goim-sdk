@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "msg";
 
@@ -85,25 +85,25 @@ export function messageFlagToJSON(object: MessageFlag): string {
 }
 
 export interface BaseMsg {
-  from: number;
-  to: number;
+  from: Long;
+  to: Long;
   content: string;
   flag: MessageFlag;
-  timestamp: number;
-  id: number;
-  seq: number;
+  timestamp: Long;
+  id: Long;
+  seq: Long;
   deviceId: string;
 }
 
 function createBaseBaseMsg(): BaseMsg {
   return {
-    from: 0,
-    to: 0,
+    from: Long.ZERO,
+    to: Long.ZERO,
     content: "",
     flag: 0,
-    timestamp: 0,
-    id: 0,
-    seq: 0,
+    timestamp: Long.ZERO,
+    id: Long.ZERO,
+    seq: Long.ZERO,
     deviceId: "",
   };
 }
@@ -113,10 +113,10 @@ export const BaseMsg = {
     message: BaseMsg,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.from !== 0) {
+    if (!message.from.isZero()) {
       writer.uint32(8).int64(message.from);
     }
-    if (message.to !== 0) {
+    if (!message.to.isZero()) {
       writer.uint32(16).int64(message.to);
     }
     if (message.content !== "") {
@@ -125,13 +125,13 @@ export const BaseMsg = {
     if (message.flag !== 0) {
       writer.uint32(32).int32(message.flag);
     }
-    if (message.timestamp !== 0) {
+    if (!message.timestamp.isZero()) {
       writer.uint32(40).int64(message.timestamp);
     }
-    if (message.id !== 0) {
+    if (!message.id.isZero()) {
       writer.uint32(48).int64(message.id);
     }
-    if (message.seq !== 0) {
+    if (!message.seq.isZero()) {
       writer.uint32(56).int64(message.seq);
     }
     if (message.deviceId !== "") {
@@ -148,10 +148,10 @@ export const BaseMsg = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.from = longToNumber(reader.int64() as Long);
+          message.from = reader.int64() as Long;
           break;
         case 2:
-          message.to = longToNumber(reader.int64() as Long);
+          message.to = reader.int64() as Long;
           break;
         case 3:
           message.content = reader.string();
@@ -160,13 +160,13 @@ export const BaseMsg = {
           message.flag = reader.int32() as any;
           break;
         case 5:
-          message.timestamp = longToNumber(reader.int64() as Long);
+          message.timestamp = reader.int64() as Long;
           break;
         case 6:
-          message.id = longToNumber(reader.int64() as Long);
+          message.id = reader.int64() as Long;
           break;
         case 7:
-          message.seq = longToNumber(reader.int64() as Long);
+          message.seq = reader.int64() as Long;
           break;
         case 8:
           message.deviceId = reader.string();
@@ -181,55 +181,63 @@ export const BaseMsg = {
 
   fromJSON(object: any): BaseMsg {
     return {
-      from: isSet(object.from) ? Number(object.from) : 0,
-      to: isSet(object.to) ? Number(object.to) : 0,
+      from: isSet(object.from) ? Long.fromValue(object.from) : Long.ZERO,
+      to: isSet(object.to) ? Long.fromValue(object.to) : Long.ZERO,
       content: isSet(object.content) ? String(object.content) : "",
       flag: isSet(object.flag) ? messageFlagFromJSON(object.flag) : 0,
-      timestamp: isSet(object.timestamp) ? Number(object.timestamp) : 0,
-      id: isSet(object.id) ? Number(object.id) : 0,
-      seq: isSet(object.seq) ? Number(object.seq) : 0,
+      timestamp: isSet(object.timestamp)
+        ? Long.fromValue(object.timestamp)
+        : Long.ZERO,
+      id: isSet(object.id) ? Long.fromValue(object.id) : Long.ZERO,
+      seq: isSet(object.seq) ? Long.fromValue(object.seq) : Long.ZERO,
       deviceId: isSet(object.deviceId) ? String(object.deviceId) : "",
     };
   },
 
   toJSON(message: BaseMsg): unknown {
     const obj: any = {};
-    message.from !== undefined && (obj.from = Math.round(message.from));
-    message.to !== undefined && (obj.to = Math.round(message.to));
+    message.from !== undefined &&
+      (obj.from = (message.from || Long.ZERO).toString());
+    message.to !== undefined && (obj.to = (message.to || Long.ZERO).toString());
     message.content !== undefined && (obj.content = message.content);
     message.flag !== undefined && (obj.flag = messageFlagToJSON(message.flag));
     message.timestamp !== undefined &&
-      (obj.timestamp = Math.round(message.timestamp));
-    message.id !== undefined && (obj.id = Math.round(message.id));
-    message.seq !== undefined && (obj.seq = Math.round(message.seq));
+      (obj.timestamp = (message.timestamp || Long.ZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || Long.ZERO).toString());
+    message.seq !== undefined &&
+      (obj.seq = (message.seq || Long.ZERO).toString());
     message.deviceId !== undefined && (obj.deviceId = message.deviceId);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<BaseMsg>, I>>(object: I): BaseMsg {
     const message = createBaseBaseMsg();
-    message.from = object.from ?? 0;
-    message.to = object.to ?? 0;
+    message.from =
+      object.from !== undefined && object.from !== null
+        ? Long.fromValue(object.from)
+        : Long.ZERO;
+    message.to =
+      object.to !== undefined && object.to !== null
+        ? Long.fromValue(object.to)
+        : Long.ZERO;
     message.content = object.content ?? "";
     message.flag = object.flag ?? 0;
-    message.timestamp = object.timestamp ?? 0;
-    message.id = object.id ?? 0;
-    message.seq = object.seq ?? 0;
+    message.timestamp =
+      object.timestamp !== undefined && object.timestamp !== null
+        ? Long.fromValue(object.timestamp)
+        : Long.ZERO;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? Long.fromValue(object.id)
+        : Long.ZERO;
+    message.seq =
+      object.seq !== undefined && object.seq !== null
+        ? Long.fromValue(object.seq)
+        : Long.ZERO;
     message.deviceId = object.deviceId ?? "";
     return message;
   },
 };
-
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
 
 type Builtin =
   | Date
@@ -242,6 +250,8 @@ type Builtin =
 
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -258,20 +268,10 @@ export type Exact<P, I extends P> = P extends Builtin
         never
       >;
 
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
 }
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-// if (_m0.util.Long !== Long) {
- 
-// }
-_m0.util.Long = Long as any;
-_m0.configure();
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
