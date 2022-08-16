@@ -1,10 +1,11 @@
 import request from '../util/request'
 import { BaseResponse, LoginResponse, RegisterRequest } from './base'
 
-export function login(account: string, password: string): Promise<LoginResponse> {
+export function login(account: string, password: string, deviceID: string): Promise<LoginResponse> {
     let data = {
         "account": account,
-        "password": password
+        "password": password,
+        "deviceID": deviceID
     }
     return new Promise<LoginResponse>((resolve, reject)=>{
         request.post('/auth/login', data)
